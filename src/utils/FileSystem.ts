@@ -11,8 +11,7 @@ export async function fileExists(uri: vscode.Uri): Promise<boolean> {
 }
 
 export async function fileType(uri: vscode.Uri): Promise<vscode.FileType> {
-    return await (await vscode.workspace.fs.stat(uri).then((stat) => stat))
-        .type;
+    return (await vscode.workspace.fs.stat(uri).then((stat) => stat)).type;
 }
 
 export async function listWithExtension(

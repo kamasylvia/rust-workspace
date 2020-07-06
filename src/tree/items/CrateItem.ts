@@ -5,30 +5,28 @@ import { TreeItemContext } from "./TreeItemContext";
 import { listAll, fileType } from "../../utils/FileSystem";
 import { FileItem } from "./fileItem";
 import path = require("path");
-import { iconMap } from "./IconMap";
+import { icons } from "./IconMap";
 
 export class CrateItem extends TreeItem implements ITreeItem {
-    public children = this.createChildren();
+    cargoUri = vscode.Uri.joinPath(this.context.uri, "Cargo.toml");
 
-    createChildren(): Promise<TreeItem[]> {
+    async createChildren(): Promise<TreeItem[]> {
         let uri = this.context.uri;
         let childrenContext: TreeItemContext[] = [];
-        listAll(uri).then((dict) =>
-            dict.forEach(async (v, k) =>
-                childrenContext.push(
-                    new TreeItemContext(k, v, await fileType(v))
-                )
-            )
-        );
+        let children = await listAll(uri).then((dict) => dict);
+
+        for (const [k, v] of children.entries()) {
+            childrenContext.push(new TreeItemContext(k, v, await fileType(v)));
+        }
+
         let result: FileItem[] = childrenContext.map(
             (context) =>
                 new FileItem(context, vscode.TreeItemCollapsibleState.Collapsed)
         );
-        return Promise.resolve(result);
 
-        throw new Error("Method not implemented.");
+        return Promise.resolve(result);
     }
 
-    iconPath = iconMap.get("crate");
+    iconPath = icons.get("crate");
     contextValue = "crateItem";
 }

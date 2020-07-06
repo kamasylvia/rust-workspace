@@ -2,7 +2,7 @@ import { workspaceRootUri } from "../../utils/FileSystem";
 import * as vscode from "vscode";
 import path = require("path");
 
-export const iconMap = new Map<string, string>([
+export const icons = new Map<string, string>([
     [
         "crate",
         path.join(

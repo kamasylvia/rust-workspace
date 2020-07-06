@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { fileExists, listWithExtension } from "../../utils/FileSystem";
-import { createCrateFromWorkspace } from "../items/ItemFactory";
+import { getCrate } from "../items/ItemFactory";
 import { TreeItem } from "../items/TreeItem";
 import { promises } from "fs";
 
@@ -34,12 +34,12 @@ export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
         const cargoTomlUri = vscode.Uri.joinPath(this.rootUri, "Cargo.toml");
 
         if (element) {
-            Promise.resolve(element.children);
+            return Promise.resolve(element.getChildren());
         } else {
-            if (this._children) {
+            if (this._children.length) {
                 return Promise.resolve(this._children);
             } else {
-                return Promise.resolve(createCrateFromWorkspace(this.rootUri));
+                return Promise.resolve(getCrate(this.rootUri));
             }
         }
         throw new Error("Method not implemented.");

@@ -8,7 +8,7 @@ export abstract class TreeItem extends vscode.TreeItem {
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
         public readonly command?: vscode.Command,
         public readonly parent?: TreeItem,
-        private _children?: Promise<TreeItem[]>
+        private _children?: TreeItem[]
     ) {
         super(context.label, collapsibleState);
     }
@@ -17,17 +17,17 @@ export abstract class TreeItem extends vscode.TreeItem {
         return this.context.label;
     }
 
-    public get children(): Promise<TreeItem[]> {
+    public async getChildren(): Promise<TreeItem[]> {
         if (this._children) {
             return this._children;
         }
 
         let childContext = this.context.copy({ parent: this });
-        this._children = this.createChildren(childContext);
+        this._children = await this.createChildren(childContext);
         return this._children;
     }
 
     abstract async createChildren(
-        childContext: TreeItemContext
+        childContext?: TreeItemContext
     ): Promise<TreeItem[]>;
 }
