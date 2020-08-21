@@ -10,6 +10,7 @@ export const icons = new Map<string, string>([
             "..",
             "..",
             "..",
+            "..",
             "resources",
             "icons",
             "vs",
@@ -23,6 +24,7 @@ export const icons = new Map<string, string>([
             "..",
             "..",
             "..",
+            "..",
             "resources",
             "icons",
             "vs",
@@ -33,6 +35,7 @@ export const icons = new Map<string, string>([
         "reference",
         path.join(
             __filename,
+            "..",
             "..",
             "..",
             "..",

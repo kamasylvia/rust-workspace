@@ -1,8 +1,6 @@
 import * as vscode from "vscode";
-import { fileExists, listWithExtension } from "../../utils/FileSystem";
 import { getCrate } from "../items/ItemFactory";
 import { TreeItem } from "../items/TreeItem";
-import { promises } from "fs";
 
 export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
     private _children: TreeItem[];
@@ -39,10 +37,10 @@ export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
             if (this._children.length) {
                 return Promise.resolve(this._children);
             } else {
-                return Promise.resolve(getCrate(this.rootUri));
+                return getCrate(this.rootUri);
             }
         }
-        throw new Error("Method not implemented.");
+        throw new Error("Provider: Method not implemented.");
     }
     // throw new Error("Method not implemented.");
 }

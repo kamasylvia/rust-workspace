@@ -14,13 +14,9 @@ export async function getCrate(rootUri: vscode.Uri): Promise<TreeItem[]> {
         return [];
     }
 
-    const cargoTomlObj = await parse
-        .async(
-            await fs.promises
-                .readFile(rootCargoTomlUri.fsPath, "utf-8")
-                .then((s) => s)
-        )
-        .then((obj) => obj);
+    const cargoTomlObj = await parse.async(
+        await fs.promises.readFile(rootCargoTomlUri.fsPath, "utf-8")
+    );
 
     const toCrate = (crateName: string): CrateItem => {
         const cargoDirUri = vscode.Uri.joinPath(rootUri, crateName);
@@ -50,14 +46,25 @@ export async function getCrate(rootUri: vscode.Uri): Promise<TreeItem[]> {
         const members = workspace["members"] as string[];
         return members ? members.map((member) => toCrate(member)) : [];
     } else {
-        vscode.window.showInformationMessage(rootCargoTomlUri.fsPath);
-        const crateName = (cargoTomlObj[
-            "package"
-        ] as JsonMap["name"]) as string;
-        return new CrateItem(
-            new TreeItemContext(crateName, rootUri, vscode.FileType.Directory),
-            vscode.TreeItemCollapsibleState.Expanded
-        ).getChildren();
-        throw new Error("Method not implemented.");
+        const crateName = (cargoTomlObj["package"] as JsonMap)[
+            "name"
+        ] as string;
+        if (!crateName) {
+            vscode.window.showWarningMessage(
+                "Your Cargo.toml does not have a package name."
+            );
+            throw new Error("");
+        }
+        return [
+            new CrateItem(
+                new TreeItemContext(
+                    crateName,
+                    rootUri,
+                    vscode.FileType.Directory
+                ),
+                vscode.TreeItemCollapsibleState.Expanded
+            ),
+        ];
+        throw new Error("ItemFactory: Method not implemented.");
     }
 }
