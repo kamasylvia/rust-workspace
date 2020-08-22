@@ -4,13 +4,15 @@ import path = require("path");
 import { CrateItem } from "./CrateItem";
 import { TreeItemContext } from "./TreeItemContext";
 import { TreeItem } from "./TreeItem";
-import { fileExists } from "../../utils/FileSystem";
+import { fileExists, listAll, fileType } from "../../utils/FileSystem";
 import { parse, JsonMap } from "@iarna/toml";
+import { ModuleItem } from "./ModuleItem";
+import { showAndThrowError } from "../../utils/errors";
 
-export async function getCrate(rootUri: vscode.Uri): Promise<TreeItem[]> {
+export async function crateFactory(rootUri: vscode.Uri): Promise<TreeItem[]> {
     const rootCargoTomlUri = vscode.Uri.joinPath(rootUri, "Cargo.toml");
 
-    if (!fileExists(rootCargoTomlUri)) {
+    if (!(await fileExists(rootCargoTomlUri))) {
         return [];
     }
 
@@ -65,6 +67,33 @@ export async function getCrate(rootUri: vscode.Uri): Promise<TreeItem[]> {
                 vscode.TreeItemCollapsibleState.Expanded
             ),
         ];
-        throw new Error("ItemFactory: Method not implemented.");
     }
+}
+export async function moduleFactory(uri: vscode.Uri): Promise<ModuleItem[]> {
+    if (!(await fileExists(uri))) {
+        showAndThrowError(`The directory ${uri.fsPath} does not exist.`);
+    }
+
+    let childrenContext: TreeItemContext[] = [];
+    let children = await listAll(uri);
+
+    for (const [k, v] of children.entries()) {
+        if (
+            await ((fileType(v).then((type) => type === vscode.FileType.File) &&
+                v.fsPath.endsWith(".rs")) ||
+                (fileType(v).then(
+                    (type) => type === vscode.FileType.Directory
+                ) &&
+                    fileExists(vscode.Uri.joinPath(v, "mod.rs"))))
+        ) {
+            childrenContext.push(new TreeItemContext(k, v, await fileType(v)));
+        }
+    }
+
+    let result: ModuleItem[] = childrenContext.map(
+        (context) =>
+            new ModuleItem(context, vscode.TreeItemCollapsibleState.Collapsed)
+    );
+
+    return result;
 }

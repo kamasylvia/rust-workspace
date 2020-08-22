@@ -20,12 +20,10 @@ export async function listWithExtension(
 ): Promise<Map<string, vscode.Uri>> {
     let result: Map<string, vscode.Uri> = new Map();
 
-    await fs.promises.readdir(uri.fsPath).then((fileNames) =>
-        fileNames.map((name) => {
+    await fs.promises.readdir(uri.fsPath).then((fileName) =>
+        fileName.map((name) => {
             if (name.endsWith(extension)) {
-                fileNames.map((name) =>
-                    result.set(name, vscode.Uri.joinPath(uri, name))
-                );
+                result.set(name, vscode.Uri.joinPath(uri, name));
             }
         })
     );
@@ -39,16 +37,14 @@ export async function listWithType(
 ): Promise<Map<string, vscode.Uri>> {
     let result: Map<string, vscode.Uri> = new Map();
 
-    await fs.promises.readdir(uri.fsPath).then((fileNames) =>
-        fileNames.map((name) => {
+    await fs.promises.readdir(uri.fsPath).then((fileName) =>
+        fileName.map((name) => {
             if (
                 vscode.workspace.fs
                     .stat(uri)
                     .then((fileStat) => fileStat.type === type)
             ) {
-                fileNames.map((name) =>
-                    result.set(name, vscode.Uri.joinPath(uri, name))
-                );
+                result.set(name, vscode.Uri.joinPath(uri, name));
             }
         })
     );

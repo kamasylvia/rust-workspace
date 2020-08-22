@@ -14,7 +14,7 @@ export const icons = new Map<string, string>([
             "resources",
             "icons",
             "vs",
-            "solution.svg"
+            "crate.svg"
         ),
     ],
     [

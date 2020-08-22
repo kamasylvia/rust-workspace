@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { getCrate } from "../items/ItemFactory";
+import { crateFactory } from "../items/ItemFactory";
 import { TreeItem } from "../items/TreeItem";
 
 export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
@@ -24,7 +24,7 @@ export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
     ): vscode.ProviderResult<TreeItem[]> {
         if (!this.rootUri) {
             vscode.window.showInformationMessage(
-                "No Crates in empty workspace."
+                "No Crates in this empty workspace."
             );
             return Promise.resolve([]);
         }
@@ -37,7 +37,7 @@ export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
             if (this._children.length) {
                 return Promise.resolve(this._children);
             } else {
-                return getCrate(this.rootUri);
+                return crateFactory(this.rootUri);
             }
         }
         throw new Error("Provider: Method not implemented.");
