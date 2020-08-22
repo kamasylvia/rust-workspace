@@ -6,15 +6,15 @@ import { listAll, fileType, fileExists } from "../../utils/FileSystem";
 import path = require("path");
 import { icons } from "./IconMap";
 import { ModuleItem } from "./ModuleItem";
-import { showAndThrowError } from "../../utils/errors";
-import { moduleFactory } from "./ItemFactory";
+import { showAndThrowError } from "../../utils/Errors";
+import { createModule } from "./ItemFactory";
 
 export class CrateItem extends TreeItem implements ITreeItem {
     cargoUri = vscode.Uri.joinPath(this.context.uri, "Cargo.toml");
     srcUri = vscode.Uri.joinPath(this.context.uri, "src");
 
     async createChildren(): Promise<TreeItem[]> {
-        return moduleFactory(this.srcUri); 
+        return createModule(this.srcUri); 
     }
 
     iconPath = icons.get("crate");

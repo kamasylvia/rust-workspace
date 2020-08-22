@@ -22,7 +22,7 @@ export abstract class TreeItem extends vscode.TreeItem {
             return this._children;
         }
 
-        let childContext = this.context.copy({ parent: this });
+        let childContext = this.context.copy();
         return this.createChildren(childContext);
     }
 

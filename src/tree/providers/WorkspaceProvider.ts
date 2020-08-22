@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { crateFactory } from "../items/ItemFactory";
+import { createCrate } from "../items/ItemFactory";
 import { TreeItem } from "../items/TreeItem";
 
 export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
@@ -37,7 +37,7 @@ export class WorkspaceProvider implements vscode.TreeDataProvider<TreeItem> {
             if (this._children.length) {
                 return Promise.resolve(this._children);
             } else {
-                return crateFactory(this.rootUri);
+                return createCrate(this.rootUri);
             }
         }
         throw new Error("Provider: Method not implemented.");

@@ -7,9 +7,9 @@ import { TreeItem } from "./TreeItem";
 import { fileExists, listAll, fileType } from "../../utils/FileSystem";
 import { parse, JsonMap } from "@iarna/toml";
 import { ModuleItem } from "./ModuleItem";
-import { showAndThrowError } from "../../utils/errors";
+import { showAndThrowError } from "../../utils/Errors";
 
-export async function crateFactory(rootUri: vscode.Uri): Promise<TreeItem[]> {
+export async function createCrate(rootUri: vscode.Uri): Promise<TreeItem[]> {
     const rootCargoTomlUri = vscode.Uri.joinPath(rootUri, "Cargo.toml");
 
     if (!(await fileExists(rootCargoTomlUri))) {
@@ -69,7 +69,8 @@ export async function crateFactory(rootUri: vscode.Uri): Promise<TreeItem[]> {
         ];
     }
 }
-export async function moduleFactory(uri: vscode.Uri): Promise<ModuleItem[]> {
+
+export async function createModule(uri: vscode.Uri): Promise<ModuleItem[]> {
     if (!(await fileExists(uri))) {
         showAndThrowError(`The directory ${uri.fsPath} does not exist.`);
     }
