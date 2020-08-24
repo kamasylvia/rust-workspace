@@ -5,7 +5,7 @@ import { TreeItemContext } from "./TreeItemContext";
 import { listAll, fileType, fileExists } from "../../utils/FileSystem";
 import path = require("path");
 import { icons } from "./IconMap";
-import { ModuleItem } from "./ModuleItem";
+import { ModuleFileItem } from "./ModuleFileItem";
 import { showAndThrowError } from "../../utils/Errors";
 import { createModule } from "./ItemFactory";
 
@@ -17,7 +17,7 @@ export class CrateItem extends TreeItem implements ITreeItem {
         return createModule(this.srcUri); 
     }
 
-    iconPath = icons.get("crate");
+    iconPath = icons.get("Crate");
 
     contextValue = "crateItem";
 }

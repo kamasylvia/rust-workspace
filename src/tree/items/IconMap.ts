@@ -4,7 +4,7 @@ import path = require("path");
 
 export const icons = new Map<string, string>([
     [
-        "crate",
+        "Crate",
         path.join(
             __filename,
             "..",
@@ -14,11 +14,11 @@ export const icons = new Map<string, string>([
             "resources",
             "icons",
             "vs",
-            "crate.svg"
+            "Crate.svg"
         ),
     ],
     [
-        "module",
+        "ModuleDirectory",
         path.join(
             __filename,
             "..",
@@ -28,11 +28,25 @@ export const icons = new Map<string, string>([
             "resources",
             "icons",
             "vs",
-            "module.svg"
+            "ModuleDirectory.svg"
         ),
     ],
     [
-        "reference",
+        "ModuleFile",
+        path.join(
+            __filename,
+            "..",
+            "..",
+            "..",
+            "..",
+            "resources",
+            "icons",
+            "vs",
+            "ModuleFile.svg"
+        ),
+    ],
+    [
+        "Reference",
         path.join(
             __filename,
             "..",

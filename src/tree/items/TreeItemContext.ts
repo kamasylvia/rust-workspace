@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TreeItem } from "./TreeItem";
-import { ModuleItem } from "./ModuleItem";
+import { ModuleFileItem } from "./ModuleFileItem";
 
 export class TreeItemContext {
     constructor(
@@ -9,7 +9,7 @@ export class TreeItemContext {
         public readonly type: vscode.FileType = vscode.FileType.File
     ) {}
 
-    copy(mod?: ModuleItem, parent?: TreeItem): TreeItemContext {
+    copy(mod?: ModuleFileItem, parent?: TreeItem): TreeItemContext {
         return new TreeItemContext(this.label, this.uri, this.type);
     }
 }

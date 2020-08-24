@@ -6,8 +6,9 @@ import { TreeItemContext } from "./TreeItemContext";
 import { TreeItem } from "./TreeItem";
 import { fileExists, listAll, fileType } from "../../utils/FileSystem";
 import { parse, JsonMap } from "@iarna/toml";
-import { ModuleItem } from "./ModuleItem";
+import { ModuleFileItem } from "./ModuleFileItem";
 import { showAndThrowError } from "../../utils/Errors";
+import { ModuleDirectoryItem } from "./ModuleDirectoryItem";
 
 export async function createCrate(rootUri: vscode.Uri): Promise<TreeItem[]> {
     const rootCargoTomlUri = vscode.Uri.joinPath(rootUri, "Cargo.toml");
@@ -70,7 +71,7 @@ export async function createCrate(rootUri: vscode.Uri): Promise<TreeItem[]> {
     }
 }
 
-export async function createModule(uri: vscode.Uri): Promise<ModuleItem[]> {
+export async function createModule(uri: vscode.Uri): Promise<TreeItem[]> {
     if (!(await fileExists(uri))) {
         showAndThrowError(`The directory ${uri.fsPath} does not exist.`);
     }
@@ -91,9 +92,16 @@ export async function createModule(uri: vscode.Uri): Promise<ModuleItem[]> {
         }
     }
 
-    let result: ModuleItem[] = childrenContext.map(
-        (context) =>
-            new ModuleItem(context, vscode.TreeItemCollapsibleState.Collapsed)
+    let result: TreeItem[] = childrenContext.map((context) =>
+        context.type === vscode.FileType.File
+            ? new ModuleFileItem(
+                  context,
+                  vscode.TreeItemCollapsibleState.Collapsed
+              )
+            : new ModuleDirectoryItem(
+                  context,
+                  vscode.TreeItemCollapsibleState.Collapsed
+              )
     );
 
     return result;
